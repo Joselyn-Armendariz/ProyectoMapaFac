@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/ProyectoCa/css/busqueda.css">
+</head>
+<body>
+    <!--navbar-->
+    <nav class="navbar navbar-expand-lg shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-3" href="/buscador">
+                <img src="/ProyectoCa/img/LogoUniversidad.png" alt="Logo Universidad">
+                <span class="brand-text">Universidad de Guayaquil</span>
+            </a>
+            <!-- Botón de menú para dispositivos móviles-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Contenido del menú -->
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+                        <li class="nav-item"><a class="nav-link fw-bold" href="/ProyectoCa/views/Busqueda.html">🔍 Buscador</a>
+                        <li class="nav-item"><a class="nav-link fw-bold" href="/ProyectoCa/views/ListaDepartamentos.html">🏢 Lista de Departamentos</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container my-4">
+        
+        <div class="p-5 mb-5 text-white rounded-4 d-flex align-items-center" style="min-height: 55vh;
+            background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)),
+            url('https://upload.wikimedia.org/wikipedia/commons/1/1c/Facultad_Industrial_Universidad_Guayaquil.jpg');
+            background-size: cover;
+            background-position: center;">
+
+            <div class="container text-center w-100">
+                <h1 class="fw-bold mb-3 display-6">Buscar un curso</h1>
+
+                <!-- Formulario de búsqueda -->
+                <form class="row justify-content-center g-2">
+                    <div class="col-md-4">
+                        <input class="form-control form-control-lg" name="buscar" placeholder="¿Qué curso buscas?" value="">
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select form-select-lg" name="bloque">
+                            <option value="" selected disabled>Bloque</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select form-select-lg" name="piso">
+                            <option value="" selected disabled>Piso</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a href="Busqueda.html" class="btn btn-outline-light btn-lg w-100">
+                            Limpiar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="resultados"></div>
+
+    </main>
+
+    <footer class="bg-white border-top py-4 mt-4">
+        <div class="container text-center text-muted">
+            © 2026 Universidad de Guayaquil · Sistema de Ubicación de Cursos
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/ProyectoCa/js/busqueda.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo general */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #EAF4FF;
+    color: #333;
+    padding: 10px;
+}
+
+/* NAVBAR BLANCO HUESO */
+    .navbar {
+        background-color: #f8f9f6;
+        border-bottom: 1px solid #e3e6ea;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        letter-spacing: .4px;
+        font-size: 1.2rem;
+        color: #1f2933 !important;
+    }
+
+    .navbar-brand img {
+        height: 60px;
+    }
+
+    .brand-text {
+        color: #0b5ed7;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        color: #374151 !important;
+    }
+
+    .nav-link:hover {
+        color: #0d6efd !important;
+    }
+
+    .btn-light {
+        background-color: #ffffff;
+        border: 1px solid #d1d5db;
+    }
+
+    .btn-light:hover {
+        background-color: #f1f5f9;
+    }
+
+/* Buscador */
+#buscador {
+    margin: 20px auto;
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 2px solid #4DA3FF;
+    outline: none;
+    margin-bottom: 25px;
+}
+
+#buscador:focus {
+    border-color: #2B7CD3;
+    background-color: #FFFFFF;
+}
+
+/* Lista de departamentos */
+#lista-departamentos {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.bloque {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.bloque h2 {
+    color: #2B7CD3;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e3e6ea;
+    padding-bottom: 5px;
+}
+
+.piso {
+    margin: 20px 0 10px;
+    color: #374151;
+}
+
+.piso-contenido {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Tarjeta de espacio */
+.departamento {
+    background-color: #FFFFFF;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.departamento:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.departamento h4 {
+    color: #2B7CD3;
+    margin-bottom: 10px;
+}
+
+.departamento p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .navbar-brand {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .logo {
+        width: 60px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

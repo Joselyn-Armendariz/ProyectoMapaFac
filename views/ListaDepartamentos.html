@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Espacios de la Facultad</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/ProyectoCa/css/estilos.css">
+</head>
+<body>
+    <header>
+    <!--navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-3" href="/buscador">
+                <img src="/ProyectoCa/img/LogoUniversidad.png" alt="Logo Universidad">
+                <span class="brand-text">Universidad de Guayaquil</span>
+            </a>
+            <!-- Botón de menú para dispositivos móviles-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Contenido del menú -->
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+                        <li class="nav-item"><a class="nav-link fw-bold" href="/ProyectoCa/views/Busqueda.html">🔍 Buscador</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </header>
+
+    <input type="text" id="buscador" placeholder="Buscar espacio...">
+
+    <div id="lista-departamentos"></div>
+
+    <!-- JavaScript -->
+    <script src="/ProyectoCa/js/app.js"></script>
+
+</body>
+</html>
