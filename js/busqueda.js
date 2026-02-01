@@ -86,5 +86,5 @@ document.querySelector('form').addEventListener('submit', function(e) {
 });
 
 function verMapa(id) {
-    window.location.href = `/mapa.html?id=${id}`;
+    window.location.href = `/mapa?id=${id}`;
 }
