@@ -1,7 +1,7 @@
 fetch('http://localhost:3000/buscador') // Una ruta que devuelva el JSON de tus bloques
     .then(res => {
             if (!res.ok) throw new Error('Error al obtener datos');
-            return res.json(); // Ahora sí recibirá un JSON real
+            return res.json();
         })
         .then(data => {
             const select = document.querySelector('select[name="bloque"]');
@@ -17,7 +17,7 @@ fetch('http://localhost:3000/buscador') // Una ruta que devuelva el JSON de tus 
 fetch('http://localhost:3000/buscadorPiso') // Una ruta que devuelva el JSON de tus pisos
     .then(res => {
             if (!res.ok) throw new Error('Error al obtener datos');
-            return res.json(); // Ahora sí recibirá un JSON real
+            return res.json();
         })
         .then(data => {
             const select = document.querySelector('select[name="piso"]');
@@ -31,14 +31,14 @@ fetch('http://localhost:3000/buscadorPiso') // Una ruta que devuelva el JSON de 
         .catch(err => console.error('Error en el fetch:', err));
 
 document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault(); // Detiene el envío normal del formulario
+    e.preventDefault();
 
     // Capturamos los datos
     const buscar = this.querySelector('input[name="buscar"]').value;
     const bloque = this.querySelector('select[name="bloque"]').value;
     const piso = this.querySelector('select[name="piso"]').value;
 
-    // Construimos la URL. Usamos rutas RELATIVAS para evitar errores de conexión
+    // Construimos la URL.
     const params = new URLSearchParams({
         buscar: buscar,
         bloque: bloque,
@@ -66,7 +66,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
                 html += `
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm h-100">
-                            <div class="card-body">
+                            <div class="card-body" onclick="verMapa(${item.id_departamento})">
                                 <h5 class="card-title text-primary">${item.departamento || item.Nombre}</h5>
                                 <p class="card-text">
                                     <strong>Bloque:</strong> ${item.bloque || 'N/A'}<br>
