@@ -1,3 +1,49 @@
+body {
+    background-color: #f4f6f9;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* NAVBAR BLANCO HUESO */
+    .navbar {
+        background-color: #f8f9f6;
+        border-bottom: 1px solid #e3e6ea;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        letter-spacing: .4px;
+        font-size: 1.2rem;
+        color: #1f2933 !important;
+    }
+
+    .navbar-brand img {
+        height: 70px;
+    }
+
+    .brand-text {
+        color: #0b5ed7;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        color: #374151 !important;
+    }
+
+    .nav-link:hover {
+        color: #0d6efd !important;
+    }
+
+    .btn-light {
+        background-color: #ffffff;
+        border: 1px solid #d1d5db;
+    }
+
+    .btn-light:hover {
+        background-color: #f1f5f9;
+    }
+
 .titulo-mapa {
     max-width: 600px;
     margin: 25px auto;
