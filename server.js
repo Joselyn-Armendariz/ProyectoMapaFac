@@ -88,7 +88,7 @@ app.get('/buscarAulas', async (req, res) => {
 // Ruta para obtener un departamento por ID
 app.get("/departamento/:id", (req, res) => {
     db.query(
-        "SELECT nombre, imagen_mapa FROM departamento WHERE id_departamento = ?",
+        "SELECT Nombre, imagen_mapa FROM departamento WHERE id_departamento = ?",
         [req.params.id],
             (err, result) => {
                 if (err) return res.status(500).json(err);
