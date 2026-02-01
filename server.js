@@ -94,12 +94,20 @@ app.get("/departamento/:id", (req, res) => {
     db.query(
         "SELECT Nombre, imagen_mapa FROM departamento WHERE id_departamento = ?",
         [req.params.id],
-            (err, result) => {
-                if (err) return res.status(500).json(err);
+        (err, result) => {
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            if (result.length === 0) {
+                return res.status(404).json({ mensaje: "Departamento no encontrado" });
+            }
+
             res.json(result[0]);
         }
     );
 });
+
 
 // Iniciar el servidor
 const PORT = 3000;
