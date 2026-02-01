@@ -46,7 +46,7 @@ app.get('/buscadorPiso', async (req, res) => {
 });
 
 // Ruta para manejar la búsqueda avanzada
-// RUTA 1: Sirve el archivo HTML (La que entras desde el navegador)
+// RUTA 1: Sirve el archivo HTML
 app.get('/buscar', (req, res) => {
     res.sendFile(__dirname + "/views/Busqueda.html");
 });
