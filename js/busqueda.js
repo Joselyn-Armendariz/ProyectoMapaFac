@@ -66,7 +66,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
                 html += `
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm h-100">
-                            <div class="card-body" onclick="verMapa(${item.id_departamento})">
+                            <div class="card-body" style="cursor:pointer" onclick="verMapa(${item.id_departamento})">
                                 <h5 class="card-title text-primary">${item.departamento || item.Nombre}</h5>
                                 <p class="card-text">
                                     <strong>Bloque:</strong> ${item.bloque || 'N/A'}<br>
