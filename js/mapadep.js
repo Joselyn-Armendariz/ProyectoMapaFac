@@ -10,3 +10,15 @@ fetch(`http://localhost:3000/departamento/${id}`)
         document.getElementById("mapa").src = dep.imagen_mapa;
         })
     .catch(err => console.log(err));
+
+let zoom = 1;
+
+function zoomMas() {
+    zoom += 0.2;
+    document.getElementById("mapa").style.transform = `scale(${zoom})`;
+}
+
+function zoomMenos() {
+    zoom = Math.max(1, zoom - 0.2);
+    document.getElementById("mapa").style.transform = `scale(${zoom})`;
+}

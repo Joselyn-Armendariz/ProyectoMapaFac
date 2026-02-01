@@ -76,3 +76,25 @@ body {
 #mapa:hover {
     transform: scale(1.05);
 }
+
+.zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.zoom-controls button {
+    width: 45px;
+    height: 45px;
+    font-size: 1.4rem;
+    border-radius: 50%;
+    border: none;
+    background-color: #2B7CD3;
+    color: white;
+    cursor: pointer;
+}
+
+.zoom-controls button:hover {
+    background-color: #0b5ed7;
+}
