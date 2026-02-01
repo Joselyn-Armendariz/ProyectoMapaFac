@@ -86,6 +86,10 @@ app.get('/buscarAulas', async (req, res) => {
 });
 
 // Ruta para obtener un departamento por ID
+app.get("/mapa", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "mapa.html"));
+});
+
 app.get("/departamento/:id", (req, res) => {
     db.query(
         "SELECT Nombre, imagen_mapa FROM departamento WHERE id_departamento = ?",
