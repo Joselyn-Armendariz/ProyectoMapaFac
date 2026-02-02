@@ -37,7 +37,7 @@ function mostrarDepartamentos(data) {
 
             bloques[bloque][piso].forEach(dep => {
                 contenido.innerHTML += `
-                    <div class="departamento">
+                    <div class="departamento" onclick="verMapa(${dep.id_departamento})">
                         <h4>${dep.Nombre}</h4>
                         <p>Tipo: ${dep.Tipo}</p>
                         ${dep.Ubicacion ? `<p>${dep.Ubicacion}</p>` : ""}
@@ -73,3 +73,6 @@ fetch("http://localhost:3000/departamento")
     })
     .catch(err => console.log(err));
 
+function verMapa(id) {
+    window.location.href = `/mapa?id=${id}`;
+}
