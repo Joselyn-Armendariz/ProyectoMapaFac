@@ -1,36 +1,36 @@
 fetch('http://localhost:3000/buscador') // Una ruta que devuelva el JSON de tus bloques
     .then(res => {
-            if (!res.ok) throw new Error('Error al obtener datos');
-            return res.json();
-        })
-        .then(data => {
-            const select = document.querySelector('select[name="bloque"]');
-            data.forEach(bloque => {
-                let opt = document.createElement('option');
-                opt.value = bloque.id_bloque; 
-                opt.innerHTML = bloque.Nombre || bloque.nombre_bloque; 
-                select.appendChild(opt);
-            });
-        })
-        .catch(err => console.error('Error en el fetch:', err));
+        if (!res.ok) throw new Error('Error al obtener datos');
+        return res.json();
+    })
+    .then(data => {
+        const select = document.querySelector('select[name="bloque"]');
+        data.forEach(bloque => {
+            let opt = document.createElement('option');
+            opt.value = bloque.id_bloque;
+            opt.innerHTML = bloque.Nombre || bloque.nombre_bloque;
+            select.appendChild(opt);
+        });
+    })
+    .catch(err => console.error('Error en el fetch:', err));
 
 fetch('http://localhost:3000/buscadorPiso') // Una ruta que devuelva el JSON de tus pisos
     .then(res => {
-            if (!res.ok) throw new Error('Error al obtener datos');
-            return res.json();
-        })
-        .then(data => {
-            const select = document.querySelector('select[name="piso"]');
-            data.forEach(piso => {
-                let opt = document.createElement('option');
-                opt.value = piso.Numero_piso; 
-                opt.innerHTML = piso.Numero_piso || piso.nombre_piso; 
-                select.appendChild(opt);
-            });
-        })
-        .catch(err => console.error('Error en el fetch:', err));
+        if (!res.ok) throw new Error('Error al obtener datos');
+        return res.json();
+    })
+    .then(data => {
+        const select = document.querySelector('select[name="piso"]');
+        data.forEach(piso => {
+            let opt = document.createElement('option');
+            opt.value = piso.Numero_piso;
+            opt.innerHTML = piso.Numero_piso || piso.nombre_piso;
+            select.appendChild(opt);
+        });
+    })
+    .catch(err => console.error('Error en el fetch:', err));
 
-document.querySelector('form').addEventListener('submit', function(e) {
+document.querySelector('form').addEventListener('submit', function (e) {
     e.preventDefault();
 
     // Capturamos los datos
@@ -69,12 +69,13 @@ document.querySelector('form').addEventListener('submit', function(e) {
                             <div class="card-body" style="cursor:pointer" onclick="verMapa(${item.id_departamento})">
                                 <h5 class="card-title text-primary">${item.departamento || item.Nombre}</h5>
                                 <p class="card-text">
-                                    <strong>Bloque:</strong> ${item.bloque || 'N/A'}<br>
-                                    <strong>Piso:</strong> ${item.piso || 'N/A'}
+                                    <strong><span style='color:#0b5ed7;'>&#127970;</span> Bloque:</strong> ${item.bloque || 'N/A'}<br>
+                                        <strong><span style='color:#0b5ed7;'>&#129521;</span> Piso:</strong> ${item.piso || 'N/A'}
                                 </p>
+                                <img src="${item.imagen || 'img/imagenes_PB/default.jpg'}" alt="${item.departamento || item.Nombre}" class="miniatura mb-2">
                             </div>
                         </div>
-                    </div>`;
+    </div>`;
             });
             html += '</div>';
             contenedor.innerHTML = html;
