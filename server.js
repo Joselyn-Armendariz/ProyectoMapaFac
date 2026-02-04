@@ -19,15 +19,15 @@ app.get("/departamento", (req, res) => {
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json({ error: err });
-        res.json(result);
+        res.json(result.rows);
     });
 });
 
 // Ruta para obtener los bloques
 app.get('/buscador', async (req, res) => {
     try {
-        const [bloques] = await db.promise().query('SELECT id_bloque, Nombre FROM Bloque');
-        res.json(bloques);
+        const bloques = await db.query('SELECT id_bloque, Nombre FROM Bloque');
+        res.json(bloques.rows);
     } catch (error) {
         console.error("Error al obtener bloques:", error);
         res.status(500).send("Error en el servidor");
@@ -37,8 +37,8 @@ app.get('/buscador', async (req, res) => {
 // Ruta para obtener los pisos
 app.get('/buscadorPiso', async (req, res) => {
     try {
-        const [pisos] = await db.promise().query('SELECT DISTINCT Numero_piso FROM Piso ORDER BY Numero_piso ASC');
-        res.json(pisos);
+        const pisos = await db.query('SELECT DISTINCT Numero_piso FROM Piso ORDER BY Numero_piso ASC');
+        res.json(pisos.rows);
     } catch (error) {
         console.error("Error al obtener pisos:", error);
         res.status(500).send("Error en el servidor");
@@ -76,8 +76,8 @@ app.get('/buscarAulas', async (req, res) => {
             params.push(piso);
         }
 
-        const [resultados] = await db.promise().query(sql, params);
-        res.json(resultados);
+        const resultados = await db.query(sql, params);
+        res.json(resultados.rows);
 
     } catch (error) {
         console.error("Error en SQL:", error);
@@ -92,25 +92,25 @@ app.get("/mapa", (req, res) => {
 
 app.get("/departamento/:id", (req, res) => {
     db.query(
-        "SELECT Nombre, imagen_mapa FROM departamento WHERE id_departamento = ?",
+        "SELECT Nombre, imagen_mapa FROM departamento WHERE id_departamento = $1",
         [req.params.id],
         (err, result) => {
             if (err) {
                 return res.status(500).json(err);
             }
 
-            if (result.length === 0) {
+            if (result.rows.length === 0) {
                 return res.status(404).json({ mensaje: "Departamento no encontrado" });
             }
 
-            res.json(result[0]);
+            res.json(result.rows[0]);
         }
     );
 });
 
 
 // Iniciar el servidor
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Servidor corriendo en http://localhost:" + PORT);
 });
