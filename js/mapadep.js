@@ -6,10 +6,10 @@ console.log("ID recibido:", id);
 fetch(`/departamento/${id}`)
     .then(res => res.json())
     .then(dep => {
-        document.getElementById("titulo").innerText = dep.Nombre;
-        document.getElementById("mapa").src = dep.imagen_mapa;
-        })
-    .catch(err => console.log(err));
+        document.getElementById("titulo").innerText = dep.nombre; 
+        document.getElementById("mapa").src = dep.imagen_mapa;   
+    })
+    .catch(err => console.error("Error cargando mapa:", err));
 
 let zoom = 1;
 

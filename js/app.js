@@ -1,4 +1,3 @@
-// Función para mostrar departamentos
 function mostrarDepartamentos(data) {
     const contenedor = document.getElementById("lista-departamentos");
     contenedor.innerHTML = "";
@@ -6,43 +5,42 @@ function mostrarDepartamentos(data) {
     const bloques = {};
 
     data.forEach(dep => {
-        const bloque = dep.Bloque;
-        const piso = dep.Piso;
+        const bloque = dep.bloque || "Sin bloque";
+        const piso = dep.piso || "Sin piso";
 
-        if (!bloques[bloque]) { // Si el bloque no existe, crearlo
+        if (!bloques[bloque]) {
             bloques[bloque] = {};
         }
 
-        if (!bloques[bloque][piso]) { // Si el piso no existe en el bloque, crearlo
+        if (!bloques[bloque][piso]) {
             bloques[bloque][piso] = [];
         }
 
-        bloques[bloque][piso].push(dep); // Agregar el departamento al piso correspondiente
+        bloques[bloque][piso].push(dep);
     });
 
-    Object.keys(bloques).forEach(bloque => { // Iterar sobre cada bloque
+    Object.keys(bloques).forEach(bloque => {
         const bloqueDiv = document.createElement("div");
-        bloqueDiv.className = "bloque";
-        bloqueDiv.innerHTML = `<h2>${bloque}</h2>`;
+        bloqueDiv.className = "bloque mb-4";
+        bloqueDiv.innerHTML = `<h2 class="text-primary">${bloque}</h2>`;
 
-        Object.keys(bloques[bloque]).forEach(piso => { // Iterar sobre cada piso en el bloque
+        Object.keys(bloques[bloque]).forEach(piso => {
             const pisoDiv = document.createElement("div");
-            pisoDiv.className = "piso";
-            pisoDiv.innerHTML = `
-                <h3>${piso}</h3>
-                <div class="piso-contenido"></div>
-            `;
-
-            const contenido = pisoDiv.querySelector(".piso-contenido"); // Contenedor para los departamentos
+            pisoDiv.className = "piso mb-3";
+            pisoDiv.innerHTML = `<h4 class="text-secondary">${piso}</h4>`;
 
             bloques[bloque][piso].forEach(dep => {
-                contenido.innerHTML += `
-                    <div class="departamento" onclick="verMapa(${dep.id_departamento})">
-                        <h4>${dep.Nombre}</h4>
-                        <p>Tipo: ${dep.Tipo}</p>
-                        ${dep.Ubicacion ? `<p>${dep.Ubicacion}</p>` : ""}
-                    </div>
+                const depDiv = document.createElement("div");
+                depDiv.className = "departamento card p-2 mb-2 shadow-sm";
+                depDiv.style.cursor = "pointer";
+
+                depDiv.innerHTML = `
+                    <b>${dep.nombre}</b>
+                    <p class="mb-0 text-muted">Tipo: ${dep.tipo}</p>
                 `;
+
+                depDiv.onclick = () => verMapa(dep.id_departamento);
+                pisoDiv.appendChild(depDiv);
             });
 
             bloqueDiv.appendChild(pisoDiv);
@@ -52,24 +50,17 @@ function mostrarDepartamentos(data) {
     });
 }
 
-// Traer datos desde el backend
+// =========================
+// TRAER DATOS DESDE BACKEND
+// =========================
 fetch("/departamento")
     .then(res => res.json())
-    .then(data => {
-        mostrarDepartamentos(data);
+    .then(data => mostrarDepartamentos(data))
+    .catch(err => console.error("Error cargando departamentos:", err));
 
-        const buscador = document.getElementById("buscador");
-        buscador.addEventListener("keyup", () => {
-            const texto = buscador.value.toLowerCase();
-            const filtrados = data.filter(dep =>
-                dep.Nombre.toLowerCase().includes(texto) ||
-                dep.Tipo.toLowerCase().includes(texto)
-            );
-            mostrarDepartamentos(filtrados);
-        });
-    })
-    .catch(err => console.log(err));
-
+// =========================
+// VER MAPA
+// =========================
 function verMapa(id) {
     window.location.href = `/mapa?id=${id}`;
 }
