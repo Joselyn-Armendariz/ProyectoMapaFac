@@ -10,7 +10,7 @@ fetch("/buscador")
         data.forEach(bloque => {
             const opt = document.createElement('option');
             opt.value = bloque.id_bloque;
-            opt.textContent = bloque.Nombre;
+            opt.textContent = bloque.nombre;
             select.appendChild(opt);
         });
     })
@@ -74,14 +74,14 @@ document.querySelector("form").addEventListener("submit", function (e) {
                         <div class="card-body" style="cursor:pointer"
                              onclick="verMapa(${item.id_departamento})">
                             <h5 class="card-title text-primary">
-                                ${item.departamento || item.Nombre}
+                                ${item.departamento || item.nombre}
                             </h5>
                             <p class="card-text">
                                 <strong>🏢 Bloque:</strong> ${item.bloque || 'N/A'}<br>
                                 <strong>📶 Piso:</strong> ${item.piso || 'N/A'}
                             </p>
                             <img src="${item.imagen_mapa || 'img/imagenes_PB/default.jpg'}"
-                                 alt="${item.departamento || item.Nombre}"
+                                 alt="${item.departamento || item.nombre}"
                                  class="miniatura mb-2"
                                  style="width:100px;">
                         </div>
@@ -112,7 +112,7 @@ fetch("/buscador")
         data.forEach(bloque => {
             const opt = document.createElement('option');
             opt.value = bloque.id_bloque;
-            opt.textContent = bloque.nombre; // ✅
+            opt.textContent = bloque.nombre;
             select.appendChild(opt);
         });
     })
@@ -174,7 +174,7 @@ document.querySelector("form").addEventListener("submit", function (e) {
                         <div class="card-body" style="cursor:pointer"
                              onclick="verMapa(${item.id_departamento})">
                             <h5 class="card-title text-primary">
-                                ${item.nombre}   <!-- ✅ -->
+                                ${item.nombre} 
                             </h5>
                             <p class="card-text">
                                 <strong>🏢 Bloque:</strong> ${item.bloque}<br>
