@@ -1,66 +1,49 @@
+let datos = [];
+
 function mostrarDepartamentos(data) {
-    const contenedor = document.getElementById("lista-departamentos");
-    contenedor.innerHTML = "";
+    const cont = document.getElementById("lista-departamentos");
+    cont.innerHTML = "";
 
-    const bloques = {};
+    const grupos = {};
 
-    data.forEach(dep => {
-        const bloque = dep.bloque || "Sin bloque";
-        const piso = dep.piso || "Sin piso";
-
-        if (!bloques[bloque]) {
-            bloques[bloque] = {};
-        }
-
-        if (!bloques[bloque][piso]) {
-            bloques[bloque][piso] = [];
-        }
-
-        bloques[bloque][piso].push(dep);
+    data.forEach(d => {
+        grupos[d.bloque] ??= {};
+        grupos[d.bloque][d.piso] ??= [];
+        grupos[d.bloque][d.piso].push(d);
     });
 
-    Object.keys(bloques).forEach(bloque => {
-        const bloqueDiv = document.createElement("div");
-        bloqueDiv.className = "bloque mb-4";
-        bloqueDiv.innerHTML = `<h2 class="text-primary">${bloque}</h2>`;
+    Object.keys(grupos).forEach(bloque => {
+        cont.innerHTML += `<h2 class="text-primary">${bloque}</h2>`;
 
-        Object.keys(bloques[bloque]).forEach(piso => {
-            const pisoDiv = document.createElement("div");
-            pisoDiv.className = "piso mb-3";
-            pisoDiv.innerHTML = `<h4 class="text-secondary">${piso}</h4>`;
+        Object.keys(grupos[bloque]).forEach(piso => {
+            cont.innerHTML += `<h4>${piso}</h4>`;
 
-            bloques[bloque][piso].forEach(dep => {
-                const depDiv = document.createElement("div");
-                depDiv.className = "departamento card p-2 mb-2 shadow-sm";
-                depDiv.style.cursor = "pointer";
-
-                depDiv.innerHTML = `
-                    <b>${dep.nombre}</b>
-                    <p class="mb-0 text-muted">Tipo: ${dep.tipo}</p>
-                `;
-
-                depDiv.onclick = () => verMapa(dep.id_departamento);
-                pisoDiv.appendChild(depDiv);
+            grupos[bloque][piso].forEach(d => {
+                cont.innerHTML += `
+                <div class="card p-2 mb-2" onclick="verMapa(${d.id_departamento})">
+                    <b>${d.nombre}</b>
+                    <small>Tipo: ${d.tipo}</small>
+                </div>`;
             });
-
-            bloqueDiv.appendChild(pisoDiv);
         });
-
-        contenedor.appendChild(bloqueDiv);
     });
 }
 
-// =========================
-// TRAER DATOS DESDE BACKEND
-// =========================
 fetch("/departamento")
     .then(res => res.json())
-    .then(data => mostrarDepartamentos(data))
-    .catch(err => console.error("Error cargando departamentos:", err));
+    .then(data => {
+        datos = data;
+        mostrarDepartamentos(data);
+    });
 
-// =========================
-// VER MAPA
-// =========================
+document.getElementById("buscador").addEventListener("keyup", e => {
+    const t = e.target.value.toLowerCase();
+    mostrarDepartamentos(datos.filter(d =>
+        d.nombre.toLowerCase().includes(t) ||
+        d.tipo.toLowerCase().includes(t)
+    ));
+});
+
 function verMapa(id) {
     window.location.href = `/mapa?id=${id}`;
 }
