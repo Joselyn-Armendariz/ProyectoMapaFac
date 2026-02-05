@@ -3,6 +3,10 @@ const cors = require("cors");
 const db = require("./bd");
 const app = express();
 const path = require("path");
+// Ruta principal para Render
+app.get('/', (req, res) => {
+    res.send('¡Servidor funcionando en Render!');
+});
 
 app.use(cors());
 app.use(express.json());
