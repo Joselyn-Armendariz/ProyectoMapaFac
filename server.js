@@ -154,6 +154,14 @@ app.get("/departamento/:id", async (req, res) => {
 });
 
 // =========================
+// RUTA BUSCADOR
+// =========================
+app.get("/buscar", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "Busqueda.html"));
+});
+
+
+// =========================
 // INICIAR SERVIDOR
 // =========================
 const PORT = process.env.PORT || 3000;
