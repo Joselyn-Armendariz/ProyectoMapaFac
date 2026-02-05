@@ -10,7 +10,7 @@ fetch("/buscador")
         data.forEach(bloque => {
             const opt = document.createElement('option');
             opt.value = bloque.id_bloque;
-            opt.textContent = bloque.Nombre;
+            opt.textContent = bloque.nombre; // ✅
             select.appendChild(opt);
         });
     })
@@ -27,8 +27,8 @@ fetch("/buscadorPiso")
 
         data.forEach(piso => {
             const opt = document.createElement('option');
-            opt.value = piso.Numero_piso;
-            opt.textContent = piso.Numero_piso;
+            opt.value = piso.numero_piso;     // ✅
+            opt.textContent = piso.numero_piso; // ✅
             select.appendChild(opt);
         });
     })
@@ -48,8 +48,6 @@ document.querySelector("form").addEventListener("submit", function (e) {
     if (buscar) params.append("buscar", buscar);
     if (bloque) params.append("bloque", bloque);
     if (piso) params.append("piso", piso);
-
-    console.log("Buscando con parámetros:", params.toString());
 
     fetch(`/buscarAulas?${params.toString()}`)
         .then(res => {
@@ -74,16 +72,12 @@ document.querySelector("form").addEventListener("submit", function (e) {
                         <div class="card-body" style="cursor:pointer"
                              onclick="verMapa(${item.id_departamento})">
                             <h5 class="card-title text-primary">
-                                ${item.departamento || item.Nombre}
+                                ${item.nombre} <!-- ✅ -->
                             </h5>
                             <p class="card-text">
-                                <strong>🏢 Bloque:</strong> ${item.bloque || 'N/A'}<br>
-                                <strong>📶 Piso:</strong> ${item.piso || 'N/A'}
+                                <strong>🏢 Bloque:</strong> ${item.bloque}<br>
+                                <strong>📶 Piso:</strong> ${item.piso}
                             </p>
-                            <img src="${item.imagen_mapa || 'img/imagenes_PB/default.jpg'}"
-                                 alt="${item.departamento || item.Nombre}"
-                                 class="miniatura mb-2"
-                                 style="width:100px;">
                         </div>
                     </div>
                 </div>`;
