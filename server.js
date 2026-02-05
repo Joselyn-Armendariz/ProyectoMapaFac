@@ -1,120 +1,159 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./bd");
-const app = express();
 const path = require("path");
-// Ruta principal para Render
-app.get('/', (req, res) => {
-    res.send('¡Servidor funcionando en Render!');
-});
 
+const app = express();
+
+// =========================
+// MIDDLEWARES
+// =========================
 app.use(cors());
 app.use(express.json());
+
+// Servir archivos estáticos (css, js, img, etc.)
 app.use(express.static(path.join(__dirname)));
 
-
-// Ruta para obtener todos los departamentos
-app.get("/departamento", (req, res) => {
-    const sql = `SELECT  d.id_departamento, d.Nombre, d.Tipo, p.Numero_piso AS Piso, b.Nombre AS Bloque FROM departamento d
-                JOIN piso p ON d.Piso = p.id_piso
-                JOIN bloque b ON p.id_bloque = b.id_bloque
-                ORDER BY b.nombre, p.numero_piso;
-    `;
-
-    db.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ error: err });
-        res.json(result.rows);
-    });
+// =========================
+// RUTA PRINCIPAL (Render)
+// =========================
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "views", "Busqueda.html"));
 });
 
-// Ruta para obtener los bloques
-app.get('/buscador', async (req, res) => {
+// =========================
+// RUTA: TODOS LOS DEPARTAMENTOS
+// =========================
+app.get("/departamento", async (req, res) => {
     try {
-        const bloques = await db.query('SELECT id_bloque, Nombre FROM Bloque');
-        res.json(bloques.rows);
-    } catch (error) {
-        console.error("Error al obtener bloques:", error);
-        res.status(500).send("Error en el servidor");
-    }
-});
-
-// Ruta para obtener los pisos
-app.get('/buscadorPiso', async (req, res) => {
-    try {
-        const pisos = await db.query('SELECT DISTINCT Numero_piso FROM Piso ORDER BY Numero_piso ASC');
-        res.json(pisos.rows);
-    } catch (error) {
-        console.error("Error al obtener pisos:", error);
-        res.status(500).send("Error en el servidor");
-    }
-});
-
-// Ruta para manejar la búsqueda avanzada
-// RUTA 1: Sirve el archivo HTML
-app.get('/buscar', (req, res) => {
-    res.sendFile(__dirname + "/views/Busqueda.html");
-});
-
-// RUTA 2: Procesa la búsqueda avanzada (La que hace la petición AJAX)
-app.get('/buscarAulas', async (req, res) => {
-    try {
-        const { buscar, bloque, piso } = req.query;
-        let sql = `SELECT  d.id_departamento, d.imagen_mapa, d.Nombre as departamento, p.Numero_piso as piso, b.Nombre as bloque
+        const sql = `
+            SELECT d.id_departamento,
+                   d.Nombre,
+                   d.Tipo,
+                   p.Numero_piso AS Piso,
+                   b.Nombre AS Bloque
             FROM Departamento d
             JOIN Piso p ON d.Piso = p.id_piso
             JOIN Bloque b ON p.id_bloque = b.id_bloque
-            WHERE 1=1`; 
-        
-    const params = [];
+            ORDER BY b.Nombre, p.Numero_piso
+        `;
+
+        const result = await db.query(sql);
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al obtener departamentos" });
+    }
+});
+
+// =========================
+// RUTA: BLOQUES
+// =========================
+app.get("/buscador", async (req, res) => {
+    try {
+        const result = await db.query(
+            "SELECT id_bloque, Nombre FROM Bloque ORDER BY Nombre"
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al obtener bloques" });
+    }
+});
+
+// =========================
+// RUTA: PISOS
+// =========================
+app.get("/buscadorPiso", async (req, res) => {
+    try {
+        const result = await db.query(
+            "SELECT DISTINCT Numero_piso FROM Piso ORDER BY Numero_piso ASC"
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al obtener pisos" });
+    }
+});
+
+// =========================
+// RUTA: BUSQUEDA AVANZADA
+// =========================
+app.get("/buscarAulas", async (req, res) => {
+    try {
+        const { buscar, bloque, piso } = req.query;
+
+        let sql = `
+            SELECT d.id_departamento,
+                   d.imagen_mapa,
+                   d.Nombre AS departamento,
+                   p.Numero_piso AS piso,
+                   b.Nombre AS bloque
+            FROM Departamento d
+            JOIN Piso p ON d.Piso = p.id_piso
+            JOIN Bloque b ON p.id_bloque = b.id_bloque
+            WHERE 1=1
+        `;
+
+        const params = [];
+        let i = 1;
 
         if (buscar) {
-            sql += " AND d.Nombre LIKE ?";
+            sql += ` AND d.Nombre ILIKE $${i++}`;
             params.push(`%${buscar}%`);
         }
+
         if (bloque) {
-            sql += " AND b.id_bloque = ?";
+            sql += ` AND b.id_bloque = $${i++}`;
             params.push(bloque);
         }
+
         if (piso) {
-            sql += " AND p.Numero_piso = ?";
+            sql += ` AND p.Numero_piso = $${i++}`;
             params.push(piso);
         }
 
-        const resultados = await db.query(sql, params);
-        res.json(resultados.rows);
+        const result = await db.query(sql, params);
+        res.json(result.rows);
 
     } catch (error) {
-        console.error("Error en SQL:", error);
+        console.error("Error en búsqueda:", error);
         res.status(500).json({ error: "Error en la base de datos" });
     }
 });
 
-// Ruta para obtener un departamento por ID
+// =========================
+// RUTA: MAPA
+// =========================
 app.get("/mapa", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "MapaDep.html"));
 });
 
-app.get("/departamento/:id", (req, res) => {
-    db.query(
-        "SELECT Nombre, imagen_mapa FROM departamento WHERE id_departamento = $1",
-        [req.params.id],
-        (err, result) => {
-            if (err) {
-                return res.status(500).json(err);
-            }
+// =========================
+// RUTA: DEPARTAMENTO POR ID
+// =========================
+app.get("/departamento/:id", async (req, res) => {
+    try {
+        const result = await db.query(
+            "SELECT Nombre, imagen_mapa FROM Departamento WHERE id_departamento = $1",
+            [req.params.id]
+        );
 
-            if (result.rows.length === 0) {
-                return res.status(404).json({ mensaje: "Departamento no encontrado" });
-            }
-
-            res.json(result.rows[0]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ mensaje: "Departamento no encontrado" });
         }
-    );
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al obtener departamento" });
+    }
 });
 
-
-// Iniciar el servidor
+// =========================
+// INICIAR SERVIDOR
+// =========================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log("Servidor corriendo en http://localhost:" + PORT);
+    console.log("Servidor corriendo en el puerto " + PORT);
 });

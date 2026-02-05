@@ -53,20 +53,17 @@ function mostrarDepartamentos(data) {
 }
 
 // Traer datos desde el backend
-fetch("http://localhost:3000/departamento")
+fetch("/departamento")
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-        // Mostrar departamentos
         mostrarDepartamentos(data);
 
-        // Habilitar búsqueda con los datos traídos del backend
         const buscador = document.getElementById("buscador");
         buscador.addEventListener("keyup", () => {
             const texto = buscador.value.toLowerCase();
-            const filtrados = data.filter(departamento =>
-                departamento.Nombre.toLowerCase().includes(texto) ||
-                departamento.Tipo.toLowerCase().includes(texto)
+            const filtrados = data.filter(dep =>
+                dep.Nombre.toLowerCase().includes(texto) ||
+                dep.Tipo.toLowerCase().includes(texto)
             );
             mostrarDepartamentos(filtrados);
         });

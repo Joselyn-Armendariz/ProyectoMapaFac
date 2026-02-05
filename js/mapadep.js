@@ -3,7 +3,7 @@ const id = params.get("id");
 
 console.log("ID recibido:", id);
 
-fetch(`http://localhost:3000/departamento/${id}`)
+fetch(`/departamento/${id}`)
     .then(res => res.json())
     .then(dep => {
         document.getElementById("titulo").innerText = dep.Nombre;

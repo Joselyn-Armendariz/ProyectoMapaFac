@@ -1,91 +1,105 @@
-fetch('http://localhost:3000/buscador') // Una ruta que devuelva el JSON de tus bloques
-    .then(res => {
-        if (!res.ok) throw new Error('Error al obtener datos');
-        return res.json();
-    })
+// =========================
+// CARGAR BLOQUES
+// =========================
+fetch("/buscador")
+    .then(res => res.json())
     .then(data => {
         const select = document.querySelector('select[name="bloque"]');
+        select.innerHTML = '<option value="">Todos</option>';
+
         data.forEach(bloque => {
-            let opt = document.createElement('option');
+            const opt = document.createElement('option');
             opt.value = bloque.id_bloque;
-            opt.innerHTML = bloque.Nombre || bloque.nombre_bloque;
+            opt.textContent = bloque.Nombre;
             select.appendChild(opt);
         });
     })
-    .catch(err => console.error('Error en el fetch:', err));
+    .catch(err => console.error("Error cargando bloques:", err));
 
-fetch('http://localhost:3000/buscadorPiso') // Una ruta que devuelva el JSON de tus pisos
-    .then(res => {
-        if (!res.ok) throw new Error('Error al obtener datos');
-        return res.json();
-    })
+// =========================
+// CARGAR PISOS
+// =========================
+fetch("/buscadorPiso")
+    .then(res => res.json())
     .then(data => {
         const select = document.querySelector('select[name="piso"]');
+        select.innerHTML = '<option value="">Todos</option>';
+
         data.forEach(piso => {
-            let opt = document.createElement('option');
+            const opt = document.createElement('option');
             opt.value = piso.Numero_piso;
-            opt.innerHTML = piso.Numero_piso || piso.nombre_piso;
+            opt.textContent = piso.Numero_piso;
             select.appendChild(opt);
         });
     })
-    .catch(err => console.error('Error en el fetch:', err));
+    .catch(err => console.error("Error cargando pisos:", err));
 
-document.querySelector('form').addEventListener('submit', function (e) {
+// =========================
+// BUSQUEDA AVANZADA
+// =========================
+document.querySelector("form").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // Capturamos los datos
     const buscar = this.querySelector('input[name="buscar"]').value;
     const bloque = this.querySelector('select[name="bloque"]').value;
     const piso = this.querySelector('select[name="piso"]').value;
 
-    // Construimos la URL.
-    const params = new URLSearchParams({
-        buscar: buscar,
-        bloque: bloque,
-        piso: piso
-    });
+    const params = new URLSearchParams();
+    if (buscar) params.append("buscar", buscar);
+    if (bloque) params.append("bloque", bloque);
+    if (piso) params.append("piso", piso);
 
     console.log("Buscando con parámetros:", params.toString());
 
-    fetch(`http://localhost:3000/buscarAulas?${params.toString()}`)
+    fetch(`/buscarAulas?${params.toString()}`)
         .then(res => {
-            if (!res.ok) throw new Error('Error en la respuesta del servidor (404 o 500)');
+            if (!res.ok) throw new Error("Error del servidor");
             return res.json();
         })
         .then(data => {
-            const contenedor = document.getElementById('resultados');
-            if (!contenedor) return console.error("Falta el div con id='resultados'");
+            const contenedor = document.getElementById("resultados");
+            if (!contenedor) return;
 
             if (data.length === 0) {
-                contenedor.innerHTML = '<div class="alert alert-warning text-center">No se encontraron resultados.</div>';
+                contenedor.innerHTML =
+                    '<div class="alert alert-warning text-center">No se encontraron resultados.</div>';
                 return;
             }
 
             let html = '<div class="row">';
             data.forEach(item => {
                 html += `
-                    <div class="col-md-4 mb-3">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-body" style="cursor:pointer" onclick="verMapa(${item.id_departamento})">
-                                <h5 class="card-title text-primary">${item.departamento || item.Nombre}</h5>
-                                <p class="card-text">
-                                    <strong><span style='color:#0b5ed7;'>&#127970;</span> Bloque:</strong> ${item.bloque || 'N/A'}<br>
-                                        <strong><span style='color:#0b5ed7;'>&#129521;</span> Piso:</strong> ${item.piso || 'N/A'}
-                                </p>
-                                <img src="${item.imagen_mapa || 'img/imagenes_PB/default.jpg'}" alt="${item.departamento || item.Nombre}" class="miniatura mb-2" style="width: 100px; height: auto;">
-                            </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body" style="cursor:pointer"
+                             onclick="verMapa(${item.id_departamento})">
+                            <h5 class="card-title text-primary">
+                                ${item.departamento || item.Nombre}
+                            </h5>
+                            <p class="card-text">
+                                <strong>🏢 Bloque:</strong> ${item.bloque || 'N/A'}<br>
+                                <strong>📶 Piso:</strong> ${item.piso || 'N/A'}
+                            </p>
+                            <img src="${item.imagen_mapa || 'img/imagenes_PB/default.jpg'}"
+                                 alt="${item.departamento || item.Nombre}"
+                                 class="miniatura mb-2"
+                                 style="width:100px;">
                         </div>
-    </div>`;
+                    </div>
+                </div>`;
             });
-            html += '</div>';
+            html += "</div>";
             contenedor.innerHTML = html;
         })
         .catch(err => {
-            console.error("Error detallado:", err);
-            alert("No se pudo conectar con el servidor. Verifica que 'node server.js' esté corriendo.");
+            console.error("Error en búsqueda:", err);
+            alert("No se pudo realizar la búsqueda.");
         });
 });
 
+// =========================
+// VER MAPA
+// =========================
 function verMapa(id) {
     window.location.href = `/mapa?id=${id}`;
 }
